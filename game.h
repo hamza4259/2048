@@ -25,9 +25,9 @@ class Game {
         
         bool gameover();
         void add_two();
-        //create a function that makes a random 2 or 4 appear somewhere on the board
-        //check how to use valgrind so no memory is leaking 
-        int** board;
+        
+        int** board; //by making board a double pointer we can dereference twice
+                     //and use it as a normal 2d array 
         int* size;
 };
 
