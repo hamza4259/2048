@@ -16,6 +16,8 @@ void Game::print_number(string num) {
 }
 
 Game::Game(){ //constructor
+  //dynamically allocating memory for board and storing size as a pointer so 
+  //I can reference it in other parts of program
   cout << "How long would you like the length to be?" << endl;
   cin >> *size;  
   board = new int*[*size]; //replace it with a 3   
@@ -32,7 +34,7 @@ for(int i = 0; i < *size; i++){
   
   
 }
-
+//if there is a 0 then it will print a dash to the user
 void Game::printBoard(){
   for(int i = 0; i < *size; i++){ //make sure i is less than a pointer later
     for(int j = 0; j < *size; j++){
@@ -50,16 +52,16 @@ void Game::printBoard(){
 
 
 void Game::move_left(int i){
-  bool** lilbaby;
-  lilbaby = new bool*[*size];
+  bool** clone;
+  clone = new bool*[*size];
 
   for (int i = 0; i < *size; i++){
-    lilbaby[i] = new bool[*size];
+    clone[i] = new bool[*size];
   }
   
   for(int i = 0; i < *size; i++){
     for(int j = 0; j < *size; j++){
-      lilbaby[i][j] = false;
+      clone[i][j] = false;
     }
   }
   
@@ -75,20 +77,20 @@ void Game::move_left(int i){
     }
     else if(board[i][j] % 2 == 0 and board[i][j - 1] == 0){ //if the number to left is a zero
       bool temp;
-      temp = lilbaby[i][j-1];
-      lilbaby[i][j - 1] = lilbaby[i][j];
-      lilbaby[i][j] = temp;
+      temp = clone[i][j-1];
+      clone[i][j - 1] = clone[i][j];
+      clone[i][j] = temp;
       
       board[i][j - 1] = board[i][j];
       board[i][j] = 0;
       j = 0;
       continue;
     }
-    else if(board[i][j] == board[i][j - 1] and lilbaby[i][j] == false and lilbaby[i][j - 1] == false){ //if the two numbers are equal 
+    else if(board[i][j] == board[i][j - 1] and clone[i][j] == false and clone[i][j - 1] == false){ //if the two numbers are equal 
       board[i][j-1] += board[i][j];
       board[i][j] = 0;
-      lilbaby[i][j-1] = true;
-      lilbaby[i][j] = false;
+      clone[i][j-1] = true;
+      clone[i][j] = false;
       
       j = 0;
       continue; 
@@ -98,25 +100,25 @@ void Game::move_left(int i){
   
   // First, we need to recycle the memory for all of the inner arrays.
   for (int i = 0; i < *size; i++) {
-    delete [] lilbaby[i];
+    delete [] clone[i];
   }
 
   // Now, we can recycle the memory for the outer array.
-  delete [] lilbaby;
+  delete [] clone;
 }
 
 
 void Game::move_right(int i){
-  bool** lilbaby;
-  lilbaby = new bool*[*size];
+  bool** clone;
+  clone = new bool*[*size];
 
   for (int i = 0; i < *size; i++){
-    lilbaby[i] = new bool[*size];
+    clone[i] = new bool[*size];
   }
   
   for(int i = 0; i < *size; i++){
     for(int j = 0; j < *size; j++){
-      lilbaby[i][j] = false;
+      clone[i][j] = false;
     }
   }
   
@@ -134,9 +136,9 @@ void Game::move_right(int i){
     else if(board[i][j] % 2 == 0 and board[i][j + 1] == 0){ //if the number to right is a zero
       
       bool temp;
-      temp = lilbaby[i][j + 1];
-      lilbaby[i][j + 1] = lilbaby[i][j];
-      lilbaby[i][j] = temp;
+      temp = clone[i][j + 1];
+      clone[i][j + 1] = clone[i][j];
+      clone[i][j] = temp;
       
       
       board[i][j + 1] = board[i][j];
@@ -144,11 +146,11 @@ void Game::move_right(int i){
       j = (*size) - 1;
       continue;
     }
-    else if(board[i][j] == board[i][j + 1] and lilbaby[i][j] == false and lilbaby[i][j + 1] == false){ //if the two numbers are equal 
+    else if(board[i][j] == board[i][j + 1] and clone[i][j] == false and clone[i][j + 1] == false){ //if the two numbers are equal 
       board[i][j + 1] += board[i][j];
       board[i][j] = 0;
-      lilbaby[i][j + 1] = true;
-      lilbaby[i][j] = false;
+      clone[i][j + 1] = true;
+      clone[i][j] = false;
       
       
       j = (*size) - 1;
@@ -159,26 +161,26 @@ void Game::move_right(int i){
   
   // First, we need to recycle the memory for all of the inner arrays.
   for (int i = 0; i < *size; i++) {
-    delete [] lilbaby[i];
+    delete [] clone[i];
   }
 
   // Now, we can recycle the memory for the outer array.
-  delete [] lilbaby;
+  delete [] clone;
   
 }
 
 
 void Game::move_up(int j){ //keep j constant 
-  bool** lilbaby;
-  lilbaby = new bool*[*size];
+  bool** clone;
+  clone = new bool*[*size];
 
   for (int i = 0; i < *size; i++){
-    lilbaby[i] = new bool[*size];
+    clone[i] = new bool[*size];
   }
   
   for(int i = 0; i < *size; i++){
     for(int j = 0; j < *size; j++){
-      lilbaby[i][j] = false;
+      clone[i][j] = false;
     }
   }
   
@@ -194,9 +196,9 @@ void Game::move_up(int j){ //keep j constant
     }
     else if(board[i][j] % 2 == 0 and board[i - 1][j] == 0){
       bool temp;
-      temp = lilbaby[i - 1][j];
-      lilbaby[i - 1][j] = lilbaby[i][j];
-      lilbaby[i][j] = temp;
+      temp = clone[i - 1][j];
+      clone[i - 1][j] = clone[i][j];
+      clone[i][j] = temp;
       
       
       board[i - 1][j] = board[i][j];
@@ -204,12 +206,12 @@ void Game::move_up(int j){ //keep j constant
       i = 0;
       continue;
     }
-    else if(board[i][j] == board[i - 1][j] and lilbaby[i][j] == false and lilbaby[i - 1][j] == false){ //if the two numbers are equal 
+    else if(board[i][j] == board[i - 1][j] and clone[i][j] == false and clone[i - 1][j] == false){ //if the two numbers are equal 
       board[i - 1][j] += board[i][j];
       board[i][j] = 0;
     
-      lilbaby[i - 1][j] = true;
-      lilbaby[i][j] = false;
+      clone[i - 1][j] = true;
+      clone[i][j] = false;
       i = 0;
       continue; 
     }
@@ -218,26 +220,26 @@ void Game::move_up(int j){ //keep j constant
   
   // First, we need to recycle the memory for all of the inner arrays.
   for (int i = 0; i < *size; i++) {
-    delete [] lilbaby[i];
+    delete [] clone[i];
   }
 
   // Now, we can recycle the memory for the outer array.
-  delete [] lilbaby;
+  delete [] clone;
 }
 
 
 void Game::move_down(int j){ //going to be similar to moving right since u have to start from bottom 
   
-  bool** lilbaby;
-  lilbaby = new bool*[*size];
+  bool** clone;
+  clone = new bool*[*size];
 
   for (int i = 0; i < *size; i++){
-    lilbaby[i] = new bool[*size];
+    clone[i] = new bool[*size];
   }
 
   for(int i = 0; i < *size; i++){
     for(int j = 0; j < *size; j++){
-      lilbaby[i][j] = false;
+      clone[i][j] = false;
     }
   }
 
@@ -254,9 +256,9 @@ void Game::move_down(int j){ //going to be similar to moving right since u have 
     }
     else if(board[i][j] % 2 == 0 and board[i + 1][j] == 0){
       bool temp;
-      temp = lilbaby[i + 1][j];
-      lilbaby[i + 1][j] = lilbaby[i][j];
-      lilbaby[i][j] = temp;
+      temp = clone[i + 1][j];
+      clone[i + 1][j] = clone[i][j];
+      clone[i][j] = temp;
       
       
       board[i + 1][j] = board[i][j];
@@ -264,12 +266,12 @@ void Game::move_down(int j){ //going to be similar to moving right since u have 
       i = (*size) - 1;
       continue;
     }
-    else if(board[i][j] == board[i + 1][j] and lilbaby[i][j] == false and lilbaby[i + 1][j] == false){ //if the two numbers are equal 
+    else if(board[i][j] == board[i + 1][j] and clone[i][j] == false and clone[i + 1][j] == false){ //if the two numbers are equal 
       board[i + 1][j] += board[i][j];
       board[i][j] = 0;
     
-      lilbaby[i + 1][j] = true;
-      lilbaby[i][j] = false;
+      clone[i + 1][j] = true;
+      clone[i][j] = false;
       i = (*size) - 1;
       continue; 
     }
@@ -278,11 +280,11 @@ void Game::move_down(int j){ //going to be similar to moving right since u have 
   
   // First, we need to recycle the memory for all of the inner arrays.
   for (int i = 0; i < *size; i++) {
-    delete [] lilbaby[i];
+    delete [] clone[i];
   }
 
   // Now, we can recycle the memory for the outer array.
-  delete [] lilbaby;
+  delete [] clone;
 }
 
 
@@ -362,15 +364,15 @@ void Game::play(){
   }
   else if(turn == "d"){ //right
     for(int i = 0; i < *size; i++){
-      move_right(i);//didnt compile yet only tried for first row it worked up until then
+      move_right(i);
     }
   }
-  else if(turn == "w"){
+  else if(turn == "w"){ //up
     for(int j = 0; j < *size; j++){
       move_up(j);
     }
   }
-  else if(turn == "s"){
+  else if(turn == "s"){ //down
     for(int j = 0; j < *size; j++){
       move_down(j);
     }
@@ -378,19 +380,10 @@ void Game::play(){
   else if(turn == "q"){
     exit(1);
     }
-  else if(turn == "g"){
-    cout << gameover() << endl;
-    }
-  else if(turn == "p" ){
-    break; 
-    }
-  else if(turn == "z"){
-    add_two();
-    }    
   }
 }
 
-Game::~Game(){
+Game::~Game(){ //destructor
 
   // First, we need to recycle the memory for all of the inner arrays.
   for (int i = 0; i < *size; i++) {
